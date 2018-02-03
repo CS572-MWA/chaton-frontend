@@ -7,8 +7,8 @@
         <mat-tab label="Login">
           <form [formGroup]="loginForm" class="form">
             <mat-form-field>
-              <input matInput placeholder="Email" [formControl]="myForm.controls['email']" />
-              <mat-error *ngIf="!myForm.controls['email'].valid">
+              <input matInput placeholder="Email" [formControl]="loginForm.controls['email']" />
+              <mat-error *ngIf="!loginForm.controls['email'].valid">
                   Please enter a valid email address
               </mat-error>
             </mat-form-field>
