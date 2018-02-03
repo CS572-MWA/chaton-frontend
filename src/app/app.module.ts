@@ -12,17 +12,25 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatGridListModule} from '@angular/material/grid-list';
 /* END */
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpService } from './http.service';
+import { AuthModule } from './auth.module';
+import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './auth.guard';
 
 const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginSignupComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   {path: '***', redirectTo: 'login'}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginSignupComponent
+    LoginSignupComponent,
+    HomeComponent
   ],
   imports: [
     RouterModule.forRoot(ROUTES),
@@ -38,8 +46,11 @@ const ROUTES: Routes = [
     /* END */
     FormsModule, 
     ReactiveFormsModule,
+    HttpClientModule,
+    AuthModule,
+    HttpModule,
   ],
-  providers: [],
+  providers: [HttpService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

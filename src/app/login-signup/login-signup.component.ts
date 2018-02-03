@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms/src/model';
+import { HttpService } from '../http.service';
 
 @Component({
   selector: 'app-login-signup',
@@ -11,7 +12,8 @@ export class LoginSignupComponent implements OnInit {
 
   loginForm: FormGroup;
   signupForm: FormGroup;
-  constructor(private formBuilder: FormBuilder) { 
+  location: any;
+  constructor(private formBuilder: FormBuilder, private httpService: HttpService) { 
     this.loginForm = formBuilder.group({
       'email': ['', Validators.compose([Validators.required, Validators.email])],
       'password': ['', Validators.required]
@@ -27,6 +29,11 @@ export class LoginSignupComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(position => {
+        this.location = position.coords;
+      });
+   }
   }
 
   onLogin(): void {
@@ -35,7 +42,21 @@ export class LoginSignupComponent implements OnInit {
   }
 
   onSignup(): void{
-    console.log(this.signupForm.value);
+    let user = this.signupForm.value;
+    user.location = [this.location.longitude, this.location.latitude];
+    this.httpService.createUser(user).subscribe(data => {
+      console.log(data);
+      switch(data['status']) {
+        case 200:
+          console.log('success')
+          break;
+        case 500:  
+          this.signupForm.controls['email'].setErrors({ duplicate: true })
+          break;
+        default:
+          console.log('error');
+      }
+    });
     return;
   }
 
