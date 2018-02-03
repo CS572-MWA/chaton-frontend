@@ -5,41 +5,62 @@
       </mat-grid-tile-header>
       <mat-tab-group>
         <mat-tab label="Login">
-          <form [formGroup]="loginForm" class="form">
+          <form [formGroup]="loginForm" class="form" (ngSubmit)="onLogin()">
             <mat-form-field>
               <input matInput placeholder="Email" [formControl]="loginForm.controls['email']" />
               <mat-error *ngIf="!loginForm.controls['email'].valid">
-                  Please enter a valid email address
+                Please enter a valid email address
               </mat-error>
             </mat-form-field>
             <mat-form-field>
-              <input type="password" matInput placeholder="Password" />
+              <input type="password" matInput placeholder="Password" [formControl]="loginForm.controls['password']" />
+              <mat-error *ngIf="!loginForm.controls['password'].valid">
+                Password required
+              </mat-error>
             </mat-form-field>
             <button mat-raised-button color="primary">Login</button>
           </form> 
         </mat-tab>
         <mat-tab label="Register">
-          <form class="form">
+          <form [formGroup]="signupForm" class="form" (ngSubmit)="onSignup()">
             <mat-form-field>
-              <input matInput placeholder="Email" />
+              <input matInput placeholder="Email" [formControl]="signupForm.controls['email']"/>
+              <mat-error *ngIf="!signupForm.controls['email'].valid">
+                  Please enter a valid email address
+              </mat-error>
             </mat-form-field>
             <mat-form-field>
-              <input matInput placeholder="Username" />
+              <input matInput placeholder="Username" [formControl]="signupForm.controls['username']" />
+              <mat-error *ngIf="!signupForm.controls['username'].valid">
+                  Username required
+              </mat-error>
             </mat-form-field>
             <mat-form-field>
-              <input matInput placeholder="Age" />
+              <input matInput placeholder="Age" [formControl]="signupForm.controls['age']" />
+              <mat-error *ngIf="!signupForm.controls['age'].valid">
+                  Age must be number
+              </mat-error>
             </mat-form-field>
             <mat-form-field>
-              <mat-select [(value)]="gender">
+              <mat-select [formControl]="signupForm.controls['gender']">
                 <mat-option value="male">Male</mat-option>
                 <mat-option value="female">Female</mat-option>
-              </mat-select> 
+              </mat-select>
+              <mat-error *ngIf="!signupForm.controls['gender'].valid">
+                  Gender required
+              </mat-error> 
             </mat-form-field>
             <mat-form-field>
-              <input type="password" matInput placeholder="Password" />
+              <input type="password" matInput placeholder="Password" [formControl]="signupForm.controls['password']"/>
+              <mat-error *ngIf="!signupForm.controls['password'].valid">
+                  Password must min length 6
+              </mat-error>
             </mat-form-field>
             <mat-form-field>
-                <input type="password" matInput placeholder="Repassword" />
+                <input type="password" matInput placeholder="Repassword" [formControl]="signupForm.controls['repassword']" />
+                <mat-error *ngIf="!signupForm.controls['repassword'].valid">
+                    Password doesn't match
+                </mat-error>
             </mat-form-field>
             <button mat-raised-button color="primary">Sign up</button>
         </form> 
