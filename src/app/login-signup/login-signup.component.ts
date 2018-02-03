@@ -40,12 +40,14 @@ export class LoginSignupComponent implements OnInit {
   }
 
   onLogin(): void {
-    this.authService.login(this.loginForm.value).subscribe(result => {
+    let user = this.signupForm.value;
+    user.location = [this.location.longitude, this.location.latitude];
+    this.authService.login(user).subscribe(result => {
       if(result == true) {
         this.router.navigate(['home']);
       }
       else {
-        this.loginForm.controls['password'].setErrors({ 'emailOrPassword': true });
+        this.loginForm.controls['password'].setErrors({ emailOrPassword: true });
       }
     });
     return;
@@ -62,7 +64,7 @@ export class LoginSignupComponent implements OnInit {
               this.router.navigate(['home']);
             }
             else {
-              this.loginForm.controls['password'].setErrors({ 'emailOrPassword': true });
+              this.loginForm.controls['password'].setErrors({ emailOrPassword: true });
             }
           });
           break;
