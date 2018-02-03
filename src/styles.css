@@ -1,2 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+body{
+    background-image: url('assets/images/bg.jpg');
+    background-size: cover;
+}
+
+.registration-frame h2 {
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+    color: #fff;
+    margin-top: 4%;
+}
+
+.registration-frame mat-tab-group {
+    max-width: 400px;
+    margin: auto;
+    margin-top: 4%;
+    background: #fff;
+    padding: 10px;
+}
+
+ 

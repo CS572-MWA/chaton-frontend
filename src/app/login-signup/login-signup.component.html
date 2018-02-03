@@ -1,8 +1,6 @@
-<mat-grid-list cols="1" rowHeight="600px">
-  <mat-grid-tile>
-      <mat-grid-tile-header style="margin: 0 480px; font-size: 20px;">
-        Welcome to Chaton
-      </mat-grid-tile-header>
+<div class="registration-frame">
+    <div layout-align="center center">
+      <h2>Welcome to Chaton</h2>
       <mat-tab-group>
         <mat-tab label="Login">
           <form [formGroup]="loginForm" class="form" (ngSubmit)="onLogin()">
@@ -76,5 +74,5 @@
         </form> 
       </mat-tab>
     </mat-tab-group>
-  </mat-grid-tile>
-</mat-grid-list>
+  </div>
+</div>
