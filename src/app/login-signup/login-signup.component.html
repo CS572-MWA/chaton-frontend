@@ -1,45 +1,46 @@
-<mat-grid-list cols="3" rowHeight="7:7">
-  <mat-grid-tile></mat-grid-tile>
+<mat-grid-list cols="1" rowHeight="600px">
   <mat-grid-tile>
+      <mat-grid-tile-header style="margin: 0 500px; font-size: 20px;">
+        Welcome to Chaton
+      </mat-grid-tile-header>
       <mat-tab-group>
-          <mat-tab label="Login">
-            <form class="form">
-                <mat-form-field>
-                  <input matInput placeholder="Email" />
-                </mat-form-field>
-                <mat-form-field>
-                  <input type="password" matInput placeholder="Password" />
-                </mat-form-field>
-                <button mat-raised-button color="primary">Login</button>
-            </form> 
-          </mat-tab>
-          <mat-tab label="Register">
-              <form class="form">
-                  <mat-form-field>
-                    <input matInput placeholder="Email" />
-                  </mat-form-field>
-                  <mat-form-field>
-                    <input matInput placeholder="Username" />
-                  </mat-form-field>
-                  <mat-form-field>
-                    <input matInput placeholder="Age" />
-                  </mat-form-field>
-                  <mat-form-field>
-                      <mat-select [(value)]="gender">
-                        <mat-option value="male">Male</mat-option>
-                        <mat-option value="female">Female</mat-option>
-                      </mat-select> 
-                  </mat-form-field>
-                  <mat-form-field>
-                    <input type="password" matInput placeholder="Password" />
-                  </mat-form-field>
-                  <mat-form-field>
-                      <input type="password" matInput placeholder="Repassword" />
-                  </mat-form-field>
-                  <button mat-raised-button color="primary">Sign up</button>
-              </form> 
-          </mat-tab>
-      </mat-tab-group>
+        <mat-tab label="Login">
+          <form class="form">
+            <mat-form-field>
+              <input matInput placeholder="Email" />
+            </mat-form-field>
+            <mat-form-field>
+              <input type="password" matInput placeholder="Password" />
+            </mat-form-field>
+            <button mat-raised-button color="primary">Login</button>
+          </form> 
+        </mat-tab>
+        <mat-tab label="Register">
+          <form class="form">
+            <mat-form-field>
+              <input matInput placeholder="Email" />
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Username" />
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Age" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select [(value)]="gender">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+              </mat-select> 
+            </mat-form-field>
+            <mat-form-field>
+              <input type="password" matInput placeholder="Password" />
+            </mat-form-field>
+            <mat-form-field>
+                <input type="password" matInput placeholder="Repassword" />
+            </mat-form-field>
+            <button mat-raised-button color="primary">Sign up</button>
+        </form> 
+      </mat-tab>
+    </mat-tab-group>
   </mat-grid-tile>
-  <mat-grid-tile></mat-grid-tile>
 </mat-grid-list>
