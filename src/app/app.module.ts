@@ -14,7 +14,6 @@ import {MatGridListModule} from '@angular/material/grid-list';
 /* END */
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpService } from './http.service';
 import { AuthModule } from './auth.module';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth.guard';
@@ -51,7 +50,7 @@ const ROUTES: Routes = [
     AuthModule,
     HttpModule,
   ],
-  providers: [HttpService, AuthGuard, AuthService],
+  providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

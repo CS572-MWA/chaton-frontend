@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms/src/model';
-import { HttpService } from '../http.service';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
@@ -15,10 +14,9 @@ export class LoginSignupComponent implements OnInit {
   loginForm: FormGroup;
   signupForm: FormGroup;
   location: any;
-  constructor(private formBuilder: FormBuilder, 
-              private httpService: HttpService,
+  constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
-              private router: Router) { 
+              private router: Router) {            
     this.loginForm = formBuilder.group({
       'email': ['', Validators.compose([Validators.required, Validators.email])],
       'password': ['', Validators.required]
@@ -47,7 +45,7 @@ export class LoginSignupComponent implements OnInit {
         this.router.navigate(['home']);
       }
       else {
-        this.loginForm.controls['password'].setErrors({ invalid: true });
+        this.loginForm.controls['password'].setErrors({ 'emailOrPassword': true });
       }
     });
     return;
@@ -56,7 +54,7 @@ export class LoginSignupComponent implements OnInit {
   onSignup(): void{
     let user = this.signupForm.value;
     user.location = [this.location.longitude, this.location.latitude];
-    this.httpService.createUser(user).subscribe(data => {
+    this.authService.createUser(user).subscribe(data => {
       switch(data['status']) {
         case 'success':
           this.authService.login({ email: user.email, password: user.password }).subscribe(result => {
@@ -64,7 +62,7 @@ export class LoginSignupComponent implements OnInit {
               this.router.navigate(['home']);
             }
             else {
-              this.loginForm.controls['password'].setErrors({ invalid: true });
+              this.loginForm.controls['password'].setErrors({ 'emailOrPassword': true });
             }
           });
           break;
