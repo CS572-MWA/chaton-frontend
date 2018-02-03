@@ -59,7 +59,9 @@ export class LoginSignupComponent implements OnInit {
     this.authService.createUser(user).subscribe(data => {
       switch(data['status']) {
         case 'success':
-          this.authService.login({ email: user.email, password: user.password }).subscribe(result => {
+          user = { email: user.email, password: user.password };
+          user.location = [this.location.longitude, this.location.latitude];
+          this.authService.login(user).subscribe(result => {
             if(result == true) {
               this.router.navigate(['home']);
             }
