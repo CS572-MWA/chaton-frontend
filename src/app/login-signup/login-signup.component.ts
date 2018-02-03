@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms/src/model';
 import { HttpService } from '../http.service';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-signup',
@@ -13,7 +15,10 @@ export class LoginSignupComponent implements OnInit {
   loginForm: FormGroup;
   signupForm: FormGroup;
   location: any;
-  constructor(private formBuilder: FormBuilder, private httpService: HttpService) { 
+  constructor(private formBuilder: FormBuilder, 
+              private httpService: HttpService,
+              private authService: AuthService,
+              private router: Router) { 
     this.loginForm = formBuilder.group({
       'email': ['', Validators.compose([Validators.required, Validators.email])],
       'password': ['', Validators.required]
@@ -33,11 +38,18 @@ export class LoginSignupComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(position => {
         this.location = position.coords;
       });
-   }
+    }
   }
 
   onLogin(): void {
-    console.log(this.loginForm.value);
+    this.authService.login(this.loginForm.value).subscribe(result => {
+      if(result == true) {
+        this.router.navigate(['home']);
+      }
+      else {
+        this.loginForm.controls['password'].setErrors({ invalid: true });
+      }
+    });
     return;
   }
 
@@ -45,13 +57,19 @@ export class LoginSignupComponent implements OnInit {
     let user = this.signupForm.value;
     user.location = [this.location.longitude, this.location.latitude];
     this.httpService.createUser(user).subscribe(data => {
-      console.log(data);
       switch(data['status']) {
-        case 200:
-          console.log('success')
+        case 'success':
+          this.authService.login({ email: user.email, password: user.password }).subscribe(result => {
+            if(result == true) {
+              this.router.navigate(['home']);
+            }
+            else {
+              this.loginForm.controls['password'].setErrors({ invalid: true });
+            }
+          });
           break;
-        case 500:  
-          this.signupForm.controls['email'].setErrors({ duplicate: true })
+        case 'failed':  
+          this.signupForm.controls['email'].setErrors({ duplicate: true });
           break;
         default:
           console.log('error');
@@ -66,4 +84,5 @@ export class LoginSignupComponent implements OnInit {
     }
     return null;
   }
+
 }

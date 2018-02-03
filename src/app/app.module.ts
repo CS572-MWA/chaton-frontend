@@ -18,6 +18,7 @@ import { HttpService } from './http.service';
 import { AuthModule } from './auth.module';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth.guard';
+import { AuthService } from './auth.service';
 
 const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -50,7 +51,7 @@ const ROUTES: Routes = [
     AuthModule,
     HttpModule,
   ],
-  providers: [HttpService, AuthGuard],
+  providers: [HttpService, AuthGuard, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
