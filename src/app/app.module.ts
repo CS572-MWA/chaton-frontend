@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginSignupComponent } from './login-signup/login-signup.component';
 /* MATERIAL MODULES */
@@ -34,8 +34,10 @@ const ROUTES: Routes = [
     MatInputModule,
     MatCardModule,
     MatGridListModule,
-    MatTabsModule
+    MatTabsModule,
     /* END */
+    FormsModule, 
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
