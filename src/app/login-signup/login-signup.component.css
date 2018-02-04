@@ -1,8 +1,14 @@
-.form {
-    display: flex;
-    flex-direction: column;
+.registration-frame h2 {
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+    color: #fff;
+    margin-top: 4%;
 }
-  
-.form > * {
-    width: 100%;
+
+.registration-frame mat-tab-group {
+    max-width: 400px;
+    margin: auto;
+    margin-top: 4%;
+    padding: 10px;
 }

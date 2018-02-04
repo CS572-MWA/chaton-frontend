@@ -1,0 +1,7 @@
+.mat-toolbar-row, .mat-toolbar-single-row {
+    height: 10vh !important;
+}
+
+mat-tab-group {
+    height: 90vh;
+}    
