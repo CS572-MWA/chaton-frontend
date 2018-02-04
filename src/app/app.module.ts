@@ -5,12 +5,42 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginSignupComponent } from './login-signup/login-signup.component';
 /* MATERIAL MODULES */
+import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatStepperModule,
+} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatCardModule, MatTabsModule, MatInputModule } from '@angular/material';
-import {MatSelectModule} from '@angular/material/select';
-import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatGridListModule} from '@angular/material/grid-list';
+import {FlexLayoutModule} from "@angular/flex-layout";
 /* END */
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -18,37 +48,68 @@ import { AuthModule } from './auth.module';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
+import { RoomComponent } from './room/room.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginSignupComponent},
   {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
-  {path: '***', redirectTo: 'login'}
+  {path: '**', redirectTo: 'home'}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginSignupComponent,
-    HomeComponent
+    HomeComponent,
+    RoomComponent,
+    ProfileComponent
   ],
+  entryComponents: [RoomComponent, ProfileComponent],
   imports: [
     RouterModule.forRoot(ROUTES),
-    /* MATERIAL MODULES */
-    BrowserAnimationsModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCardModule,
-    MatGridListModule,
-    MatTabsModule,
-    /* END */
     FormsModule, 
     ReactiveFormsModule,
     HttpClientModule,
     AuthModule,
     HttpModule,
+    /* MATERIAL MODULES */
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    FlexLayoutModule
+    /* END */
   ],
   providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]

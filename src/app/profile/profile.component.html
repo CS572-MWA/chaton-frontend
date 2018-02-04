@@ -1,0 +1,50 @@
+<mat-toolbar color="primary">
+  <span>Edit profile</span>
+</mat-toolbar>
+<form [formGroup]="profileForm" class="form" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input matInput placeholder="Email" [formControl]="profileForm.controls['email']"/>
+      <mat-error *ngIf="!profileForm.controls['email'].valid">
+          <span *ngIf="profileForm.controls['email'].hasError('duplicate')">
+            This email already exists
+          </span>
+          <span *ngIf="!profileForm.controls['email'].hasError('duplicate')">
+            Please enter a valid email address
+          </span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Username" [formControl]="profileForm.controls['username']" />
+      <mat-error *ngIf="!profileForm.controls['username'].valid">
+          Username required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Age" [formControl]="profileForm.controls['age']" />
+      <mat-error *ngIf="!profileForm.controls['age'].valid">
+          Age must be number
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Gender" [formControl]="profileForm.controls['gender']">
+        <mat-option value="male">Male</mat-option>
+        <mat-option value="female">Female</mat-option>
+      </mat-select>
+      <mat-error *ngIf="!profileForm.controls['gender'].valid">
+          Gender required
+      </mat-error> 
+    </mat-form-field>
+    <mat-form-field>
+      <input type="password" matInput placeholder="Password" [formControl]="profileForm.controls['password']"/>
+      <mat-error *ngIf="!profileForm.controls['password'].valid">
+          Password must min length 6
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary">Update</button>
+</form>
+
+<style>
+  mat-form-field {
+    display: block;
+  }
+</style>

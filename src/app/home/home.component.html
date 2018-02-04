@@ -1,3 +1,98 @@
-<p>
-  home works!
-</p>
+<mat-toolbar color="primary">
+  <button mat-button (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Chaton</span>
+</mat-toolbar>
+
+<mat-sidenav #sidenav mode="side" style="width: 250px;">
+  <mat-toolbar color="primary">
+    <span>MENU</span>
+  </mat-toolbar>
+  <mat-sidenav-container>
+    <mat-sidenav-content>
+      <mat-card>
+        <mat-card-title>
+            <i class="fa fa-female fa-lg"></i> munkhuu
+        </mat-card-title>
+        <mat-card-subtitle>
+          munkhuu48@gmail.com
+        </mat-card-subtitle>
+      </mat-card>
+    </mat-sidenav-content>
+    <mat-sidenav-content>
+      <mat-list role="list">
+        <mat-list-item role="listitem">
+          <button mat-button (click)="openProfileDialog()">
+            <mat-icon>account_circle</mat-icon> My Profile
+          </button>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+          <button mat-button color="warn" (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon> Logout
+          </button>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+          <button mat-button (click)="sidenav.toggle()">
+            <mat-icon>clear</mat-icon> Close Menu
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</mat-sidenav>
+
+<div style="position: fixed;left:10px;bottom: 10px; z-index: 10; width: 50%;">
+    <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+      <mat-form-field style="width: 100%;">
+          <input matInput placeholder="Type here ..." [formControl]="messageForm.controls['message']"/>
+          <mat-error *ngIf="!messageForm.controls['message'].valid">
+              Message required
+          </mat-error>
+      </mat-form-field>
+    </form>
+</div>
+
+<div style="position: fixed;right:10px;bottom: 10px; z-index: 10;">
+  <button mat-button mat-fab matTooltip="add room!" (click)="openRoomDialog()">
+      +
+  </button>
+</div>
+
+<mat-tab-group>
+    <mat-tab label="Public">
+      <div class="flex-container" 
+            fxLayout="row" 
+            fxLayout.xs="column"
+            fxLayoutAlign="center center"
+            fxLayoutAlign.xs="start">
+        <div class="flex-item" fxFlex="80%">
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                  Hello
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <div class="flex-item" fxFlex="20%">
+            <mat-toolbar color="primary">
+              <span>Active users</span>
+            </mat-toolbar>
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                  User 1
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                  User 2
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                  User 3
+                </mat-list-item>  
+            </mat-list>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Geo">
+    </mat-tab>
+</mat-tab-group>
+    
+  

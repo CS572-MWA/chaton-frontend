@@ -1,9 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~font-awesome/css/font-awesome.css';
 body{
     background-image: url('assets/images/bg.jpg');
     background-size: cover;
+    margin: 0;
 }
 
 .registration-frame h2 {
@@ -14,11 +16,20 @@ body{
     margin-top: 4%;
 }
 
+.mat-toolbar-row, .mat-toolbar-single-row {
+    height: 10vh !important;
+}
+
+
+mat-tab-group {
+    background-color: #eee;
+    height: 90vh;
+}
+
 .registration-frame mat-tab-group {
     max-width: 400px;
     margin: auto;
     margin-top: 4%;
-    background: #fff;
     padding: 10px;
 }
 

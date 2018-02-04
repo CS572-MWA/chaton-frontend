@@ -1,0 +1,12 @@
+<mat-toolbar color="primary">
+  <span>Create room</span>
+</mat-toolbar>
+<form [formGroup]="roomForm" class="form" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input matInput placeholder="Name" [formControl]="roomForm.controls['name']" />
+      <mat-error *ngIf="!roomForm.controls['name'].valid">
+        Room name required
+      </mat-error>
+    </mat-form-field>
+    <button mat-button color="primary">Create</button>
+</form>

@@ -27,10 +27,17 @@ export class AuthService {
 
   logout(){
     localStorage.removeItem('token');
+    console.log('logout')
   }
 
   createUser(user: any): Observable<any> {
     return this.authHttp.post(this.url + '/users/', user).map((response: Response) => {
+      return response.json();
+    })
+  }
+
+  createGroup(group: any): Observable<any> {
+    return this.authHttp.post(this.url + '/groups/', group).map((response: Response) => {
       return response.json();
     })
   }
