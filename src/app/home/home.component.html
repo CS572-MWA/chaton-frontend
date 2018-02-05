@@ -13,10 +13,12 @@
     <mat-sidenav-content>
       <mat-card>
         <mat-card-title>
-            <i class="fa fa-female fa-lg"></i> munkhuu
+            <i class="fa fa-female pink" *ngIf="user.gender == 'female'"></i>
+            <i class="fa fa-male blue" *ngIf="user.gender == 'male'"></i> 
+            {{ user.username }}
         </mat-card-title>
         <mat-card-subtitle>
-          munkhuu48@gmail.com
+          {{ user.email }}
         </mat-card-subtitle>
       </mat-card>
     </mat-sidenav-content>
@@ -60,7 +62,7 @@
 </div>
 
 <mat-tab-group>
-    <mat-tab label="Public">
+    <mat-tab *ngFor="let group of groups" label="{{ group.name }}">
       <div class="flex-container" 
             fxLayout="row" 
             fxLayout.xs="column"
@@ -75,23 +77,25 @@
         </div>
         <div class="flex-item" fxFlex="20%">
             <mat-toolbar color="primary">
-              <span>Active users</span>
+              <span><i class="fa fa-users"></i> users</span>
             </mat-toolbar>
             <mat-list role="list">
                 <mat-list-item role="listitem">
-                  User 1
+                  <a mat-raised-button (click)="openAddUserDialog(group._id)">
+                    <i class="fa fa-plus red"></i> Add user
+                  </a>
                 </mat-list-item>
-                <mat-list-item role="listitem">
-                  User 2
-                </mat-list-item>
-                <mat-list-item role="listitem">
-                  User 3
-                </mat-list-item>  
+                <mat-list-item *ngFor="let gu of group.users" role="listitem">
+                  <i class="fa fa-female pink" *ngIf="gu.gender == 'female'"></i> 
+                  <i class="fa fa-male blue" *ngIf="gu.gender == 'male'"></i>
+                  &nbsp;{{ gu.username }}
+                  <div style="position: absolute; right: 20px; margin-top: -20px;">
+                    <a (click)="removeUserFromGroup(group._id, gu._id)"><i class="fa fa-trash-o"></i></a>
+                  </div>
+                </mat-list-item> 
             </mat-list>
         </div>
       </div>
-    </mat-tab>
-    <mat-tab label="Geo">
     </mat-tab>
 </mat-tab-group>
     

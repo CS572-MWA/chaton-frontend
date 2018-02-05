@@ -7,7 +7,9 @@ body{
     background-size: cover;
     margin: 0;
 }
-
+a:hover {
+    cursor: pointer;
+}
 mat-tab-group {
     background-color: #eee;
 }
@@ -19,6 +21,18 @@ mat-tab-group {
   
 .form > * {
     width: 100%;
+}
+
+.pink {
+    color: pink;
+}
+
+.blue {
+    color: blue;
+}
+
+.red {
+    color: red;
 }
 
  

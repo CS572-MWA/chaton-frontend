@@ -12,12 +12,14 @@ import { AuthService } from '../auth.service';
 export class RoomComponent implements OnInit {
 
   roomForm: FormGroup;
+  user: {any};
   constructor(private formBuilder: FormBuilder, 
               private authHttp: AuthService,
               private dialogRef: MatDialogRef<RoomComponent>) { 
     this.roomForm = formBuilder.group({
       'name': ['', Validators.required],
-    })
+    });
+    this.user = this.authHttp.parseToken();
   }
 
   ngOnInit() {
@@ -25,7 +27,7 @@ export class RoomComponent implements OnInit {
 
   onSubmit(): void {
     let group = this.roomForm.value;
-    group.users = ['5a763c66cc38db200f43d02c'];
+    group.users = [this.user['id']];
     this.authHttp.createGroup(group).subscribe(data => {
       switch(data['status']) {
         case 'success':

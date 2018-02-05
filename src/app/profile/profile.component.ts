@@ -12,6 +12,7 @@ import { AuthService } from '../auth.service';
 export class ProfileComponent implements OnInit {
 
   profileForm: FormGroup;
+  user: {any};
   constructor(private formBuilder: FormBuilder, 
               private authService: AuthService,
               private dialogRef: MatDialogRef<ProfileComponent>) {
@@ -21,14 +22,34 @@ export class ProfileComponent implements OnInit {
       'username': ['', Validators.required],
       'age': ['', [Validators.pattern('^[0-9]+$'), Validators.required]],
       'gender': ['', Validators.required],
-      'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-    });            
+      'password': [''],
+    });       
+    this.user = this.authService.parseToken();
+    this.profileForm.setValue({
+      email: this.user['email'],
+      username: this.user['username'],
+      age: this.user['age'],
+      gender: this.user['gender'],
+      password: '',
+    });     
   }
 
   ngOnInit() {
   }
 
   onSubmit(): void {
-    
+    this.authService.updateUser(this.profileForm.value).subscribe(data => {
+      switch(data.status){
+        case 'success':
+          localStorage.setItem('token', data.data.token);
+          this.dialogRef.close();
+          break;
+        case 'failed':
+          this.profileForm.controls['email'].setErrors({ duplicate: true });
+          break;
+        default: 
+          console.log('error');
+      }
+    });
   }
 }

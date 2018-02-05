@@ -50,7 +50,18 @@ import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { RoomComponent } from './room/room.component';
 import { ProfileComponent } from './profile/profile.component';
-
+/* REDUX */
+import {
+  applyMiddleware,
+  Store,
+  combineReducers,
+  compose,
+  createStore
+} from 'redux';
+import { NgReduxModule, NgRedux } from 'ng2-redux';
+import { AddUserComponent } from './add-user/add-user.component';
+interface IAppState { /* ... */ };
+/* END */
 const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginSignupComponent},
@@ -64,9 +75,10 @@ const ROUTES: Routes = [
     LoginSignupComponent,
     HomeComponent,
     RoomComponent,
-    ProfileComponent
+    ProfileComponent,
+    AddUserComponent
   ],
-  entryComponents: [RoomComponent, ProfileComponent],
+  entryComponents: [RoomComponent, ProfileComponent, AddUserComponent],
   imports: [
     RouterModule.forRoot(ROUTES),
     FormsModule, 

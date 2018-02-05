@@ -13,7 +13,7 @@ export class LoginSignupComponent implements OnInit {
 
   loginForm: FormGroup;
   signupForm: FormGroup;
-  location: any;
+  location: [any];
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
               private router: Router) {            
@@ -29,25 +29,33 @@ export class LoginSignupComponent implements OnInit {
       'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       'repassword': ['', [Validators.required, this.repasswordValidator]],
     });
-  }
-
-  ngOnInit() {
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(position => {
-        this.location = position.coords;
+        this.location = [position.coords.longitude, position.coords.latitude];
       });
     }
   }
 
+  ngOnInit() {
+    if(!this.location){
+      this.location = [-91.96737, 41.02238];
+    }
+  }
+
   onLogin(): void {
-    let user = this.signupForm.value;
-    user.location = [this.location.longitude, this.location.latitude];
+    let user = this.loginForm.value;
+    user.location = this.location;
     this.authService.login(user).subscribe(result => {
-      if(result == true) {
-        this.router.navigate(['home']);
-      }
-      else {
-        this.loginForm.controls['password'].setErrors({ emailOrPassword: true });
+      switch(result['status']){
+        case 'success':
+          localStorage.setItem('token', result.data.token);
+          this.router.navigate(['home']);
+          break;
+        case 'failed':
+          this.loginForm.controls['password'].setErrors({ emailOrPassword: true });
+          break;
+        default:
+          console.log('error');
       }
     });
     return;
@@ -55,18 +63,23 @@ export class LoginSignupComponent implements OnInit {
 
   onSignup(): void{
     let user = this.signupForm.value;
-    user.location = [this.location.longitude, this.location.latitude];
+    user.location = this.location;
     this.authService.createUser(user).subscribe(data => {
       switch(data['status']) {
         case 'success':
           user = { email: user.email, password: user.password };
-          user.location = [this.location.longitude, this.location.latitude];
+          user.location = this.location;
           this.authService.login(user).subscribe(result => {
-            if(result == true) {
-              this.router.navigate(['home']);
-            }
-            else {
-              this.loginForm.controls['password'].setErrors({ emailOrPassword: true });
+            switch(result['status']){
+              case 'success':
+                localStorage.setItem('token', result.data.token);
+                this.router.navigate(['home']);
+                break;
+              case 'failed':
+                this.loginForm.controls['password'].setErrors({ emailOrPassword: true });
+                break;
+              default:
+                console.log('error');
             }
           });
           break;

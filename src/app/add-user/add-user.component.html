@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <span>Add User</span>
+</mat-toolbar>
+<form [formGroup]="userForm" class="form" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input matInput placeholder="Username" [matAutocomplete]="auto" [formControl]="userForm.controls['data']" >
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngFor="let user of users" [value]="user">
+        <span>{{ user.username }}</span> |
+        <small>{{ user.email }}</small>
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="!userForm.controls['data'].valid">
+        Username required
+    </mat-error> 
+  </mat-form-field>
+  <button mat-raised-button color="primary">Add</button>
+</form>
