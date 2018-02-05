@@ -38,7 +38,7 @@ export class LoginSignupComponent implements OnInit {
 
   ngOnInit() {
     if(!this.location){
-      this.location = [-91.96737, 41.02238];
+      this.location = [0.0, 0.0];
     }
   }
 

@@ -61,7 +61,7 @@
   </button>
 </div>
 
-<mat-tab-group>
+<mat-tab-group (click)="sidenav.close()">
     <mat-tab *ngFor="let group of groups" label="{{ group.name }}">
       <div class="flex-container" 
             fxLayout="row" 
