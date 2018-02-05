@@ -43,7 +43,6 @@ export class ProfileComponent implements OnInit {
     this.authService.updateUser(this.profileForm.value).subscribe(data => {
       switch(data.status){
         case 'success':
-          console.log(data);
           localStorage.setItem('token', data.data.token);
           // REDUX
           this.actionService.updateUserGlobally();
