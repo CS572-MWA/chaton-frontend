@@ -62,7 +62,7 @@
 </div>
 
 <mat-tab-group (click)="sidenav.close()">
-    <mat-tab *ngFor="let group of groups" label="{{ group.name }}">
+    <mat-tab *ngFor="let group of groups$ | async" label="{{ group.name }}">
       <div class="flex-container" 
             fxLayout="row" 
             fxLayout.xs="column"
@@ -81,7 +81,7 @@
             </mat-toolbar>
             <mat-list role="list">
                 <mat-list-item role="listitem">
-                  <a mat-raised-button (click)="openAddUserDialog(group._id)">
+                  <a mat-raised-button (click)="openAddUserDialog(group.id)">
                     <i class="fa fa-plus red"></i> Add user
                   </a>
                 </mat-list-item>
@@ -90,7 +90,7 @@
                   <i class="fa fa-male blue" *ngIf="gu.gender == 'male'"></i>
                   &nbsp;{{ gu.username }}
                   <div style="position: absolute; right: 20px; margin-top: -20px;">
-                    <a (click)="removeUserFromGroup(group._id, gu._id)"><i class="fa fa-trash-o"></i></a>
+                    <a (click)="removeUserFromGroup(group.id, gu._id)"><i class="fa fa-trash-o"></i></a>
                   </div>
                 </mat-list-item> 
             </mat-list>

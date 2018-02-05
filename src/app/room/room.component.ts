@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms/src/model';
 import { MatDialogRef } from '@angular/material';
 import { AuthService } from '../auth.service';
+import { ActionService } from '../action.service';
 
 @Component({
   selector: 'app-room',
@@ -15,6 +16,7 @@ export class RoomComponent implements OnInit {
   user: {any};
   constructor(private formBuilder: FormBuilder, 
               private authHttp: AuthService,
+              private actionService: ActionService,
               private dialogRef: MatDialogRef<RoomComponent>) { 
     this.roomForm = formBuilder.group({
       'name': ['', Validators.required],
@@ -31,10 +33,11 @@ export class RoomComponent implements OnInit {
     this.authHttp.createGroup(group).subscribe(data => {
       switch(data['status']) {
         case 'success':
+          this.actionService.addGroup([data.data]);
           this.dialogRef.close();
           break;
         case 'failed':  
-          console.log('failed');
+          console.log(data);
           break
         default:
           console.log('error');

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { select } from 'ng2-redux';
 import { Observable } from 'rxjs/Observable';
 import { IUser } from './../redux-store/user';
+import { IGroup } from './../redux-store/group';
 import { ActionService } from '../action.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit {
 
   messageForm: FormGroup;
   @select('user') user$: Observable<IUser>;
+  @select('groups') groups$: Observable<IGroup>;
   groups: [any];
   user: {};
   constructor(private dialog: MatDialog, 
@@ -33,14 +35,14 @@ export class HomeComponent implements OnInit {
       'message': ['', Validators.required],
     });
     // REDUX
-    this.actionService.updateUserGlobally();
+    this.actionService.updateUser();
     this.user$.subscribe(data => {
       this.user = data;
     });
     this.authService.groups().subscribe(data => {
       switch(data.status){
         case 'success':
-          this.groups = data.data;
+          this.actionService.addGroup(data.data);
           break;
         case 'failed':
           console.log(data)
@@ -96,7 +98,10 @@ export class HomeComponent implements OnInit {
       this.authService.removeUserFromGroup({ id: group_id, user_id: user_id }).subscribe(data => {
         switch(data.status){
           case 'success':
-            console.log(data);
+            this.actionService.removeUserFromGroup({
+              id: group_id,
+              user_id: user_id
+            });
             break;
           case 'failed':
             console.log(data)

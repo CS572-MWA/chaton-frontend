@@ -45,7 +45,7 @@ export class ProfileComponent implements OnInit {
         case 'success':
           localStorage.setItem('token', data.data.token);
           // REDUX
-          this.actionService.updateUserGlobally();
+          this.actionService.updateUser();
           this.dialogRef.close();
           break;
         case 'failed':

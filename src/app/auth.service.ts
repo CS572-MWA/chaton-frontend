@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { HttpClient } from '@angular/common/http';
 import { URL } from './app.config';
+import { ActionService } from './action.service';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
   url: string = URL;
   constructor(private authHttp: AuthHttp, 
               private http: HttpClient,
+              private actionService: ActionService,
               private jwtHelper: JwtHelper) { }
 
   login(user): Observable<any>  {
@@ -23,7 +25,8 @@ export class AuthService {
   }
 
   logout(){
-    localStorage.removeItem('token');
+    localStorage.clear();
+    this.actionService.clear();
     console.log('logout');
   }
 

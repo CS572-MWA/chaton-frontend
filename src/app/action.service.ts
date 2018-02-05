@@ -7,7 +7,7 @@ export class ActionService {
 
   constructor(private componentActions:ComponentActions, private jwtHelper: JwtHelper) { }
 
-  updateUserGlobally(): void{
+  updateUser(): void{
     let data = this.parseToken();
     this.componentActions.updateUserAction({
       id: data.id,
@@ -16,6 +16,36 @@ export class ActionService {
       gender: data.gender,
       age: data.age,
     });
+  }
+
+  addGroup(groups): void {
+    for(let group of groups) {
+      this.componentActions.addGroup({
+        id: group._id,
+        name: group.name,
+        users: group.users,
+      });
+    }
+  }
+
+  addUsersToGroup(data): void {
+    this.componentActions.addUserToGroup({
+      id: data.id,
+      users: data.users
+    })
+  }
+
+  removeUserFromGroup(data): void {
+    let current_user = this.parseToken();
+    this.componentActions.removeUserFromGroup({
+      id: data.id,
+      user_id: data.user_id,
+      current_user_id: current_user.id
+    })
+  }
+
+  clear() {
+    this.componentActions.clear();
   }
   
   parseToken() {
