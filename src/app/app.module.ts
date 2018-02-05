@@ -61,7 +61,7 @@ import {
   createStore
 } from 'redux';
 import { NgReduxModule, NgRedux } from 'ng2-redux';
-import { store, IUserState } from './redux-store/index';
+import { store, IAppState } from './redux-store/index';
 import { ComponentActions } from './redux-store/actions';
 import { ActionService } from './action.service';
 /* END */
@@ -131,7 +131,7 @@ const ROUTES: Routes = [
   bootstrap: [AppComponent]
 })
 export class AppModule { 
-  constructor(ngRedux: NgRedux<IUserState>) {
+  constructor(ngRedux: NgRedux<IAppState>) {
     ngRedux.provideStore(store)
   }
 }

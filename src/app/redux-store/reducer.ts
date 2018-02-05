@@ -1,7 +1,7 @@
-import { IUserState } from './state'
+import { IAppState } from './state'
 import { UPDATE_USER } from './actions'
 
-const initialState: IUserState = {
+const initialState: IAppState = {
     user: {
         id: '',
         username: '',
@@ -11,14 +11,14 @@ const initialState: IUserState = {
     }
 }  
 
-function updateUser(state, action): IUserState {
+function updateUser(state, action): IAppState {
     return Object.assign({}, state, 
     {
-        user: action.text
+        user: action.user
     });
 }
 
-export function reducer(state:IUserState = initialState, action){
+export function reducer(state:IAppState = initialState, action){
     switch(action.type){
       case UPDATE_USER:
         return updateUser(state, action); 

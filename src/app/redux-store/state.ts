@@ -1,5 +1,5 @@
 import { IUser } from './user'
 
-export interface IUserState{
+export interface IAppState{
     user: IUser;
 }
