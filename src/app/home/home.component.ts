@@ -8,6 +8,11 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms/src/model';
 import { Router } from '@angular/router';
 
+import { select } from 'ng2-redux';
+import { Observable } from 'rxjs/Observable';
+import { IUser } from './../redux-store/user';
+import { ActionService } from '../action.service';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -16,16 +21,22 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
 
   messageForm: FormGroup;
-  user: {any};
+  @select('user') user$: Observable<IUser>;
   groups: [any];
+  user: {};
   constructor(private dialog: MatDialog, 
               private authService: AuthService,
               private formBuilder: FormBuilder,
-              private router: Router) { 
+              private router: Router,
+              private actionService: ActionService) { 
     this.messageForm = formBuilder.group({
       'message': ['', Validators.required],
     });
-    this.user = this.authService.parseToken();
+    // REDUX
+    this.actionService.updateUserGlobally();
+    this.user$.subscribe(data => {
+      this.user = data;
+    });
     this.authService.groups().subscribe(data => {
       switch(data.status){
         case 'success':

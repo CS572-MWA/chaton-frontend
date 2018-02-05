@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms/src/model';
 import { MatDialogRef } from '@angular/material';
 import { AuthService } from '../auth.service';
+import { ActionService } from '../action.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,10 +13,10 @@ import { AuthService } from '../auth.service';
 export class ProfileComponent implements OnInit {
 
   profileForm: FormGroup;
-  user: {any};
   constructor(private formBuilder: FormBuilder, 
               private authService: AuthService,
-              private dialogRef: MatDialogRef<ProfileComponent>) {
+              private dialogRef: MatDialogRef<ProfileComponent>,
+              private actionService: ActionService) {
               
     this.profileForm = formBuilder.group({
       'email': ['', Validators.compose([Validators.required, Validators.email])],
@@ -24,24 +25,28 @@ export class ProfileComponent implements OnInit {
       'gender': ['', Validators.required],
       'password': [''],
     });       
-    this.user = this.authService.parseToken();
+    let user = this.authService.parseToken();
     this.profileForm.setValue({
-      email: this.user['email'],
-      username: this.user['username'],
-      age: this.user['age'],
-      gender: this.user['gender'],
+      email: user['email'],
+      username: user['username'],
+      age: user['age'],
+      gender: user['gender'],
       password: '',
     });     
   }
 
   ngOnInit() {
+    
   }
 
   onSubmit(): void {
     this.authService.updateUser(this.profileForm.value).subscribe(data => {
       switch(data.status){
         case 'success':
+          console.log(data);
           localStorage.setItem('token', data.data.token);
+          // REDUX
+          this.actionService.updateUserGlobally();
           this.dialogRef.close();
           break;
         case 'failed':

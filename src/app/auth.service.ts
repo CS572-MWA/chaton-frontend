@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthHttp, tokenNotExpired } from 'angular2-jwt';
+import { AuthHttp, tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -8,8 +8,10 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class AuthService {
 
-  url: string = 'http://172.19.143.201:3000';
-  constructor(private authHttp: AuthHttp, private http: HttpClient) { }
+  url: string = 'http://localhost:3000';
+  constructor(private authHttp: AuthHttp, 
+              private http: HttpClient,
+              private jwtHelper: JwtHelper) { }
 
   login(user): Observable<any>  {
     return this.http.post(this.url+'/users/login/', user);
@@ -66,9 +68,7 @@ export class AuthService {
 
   parseToken() {
     let token = localStorage.getItem('token');
-    let base64Url = token.split('.')[1];
-    let base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
+    return this.jwtHelper.decodeToken(token);
   }
 
 }

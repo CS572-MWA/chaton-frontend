@@ -2,8 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppComponent } from './app.component';
-import { LoginSignupComponent } from './login-signup/login-signup.component';
 /* MATERIAL MODULES */
 import {
   MatAutocompleteModule,
@@ -41,15 +39,19 @@ import {
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FlexLayoutModule} from "@angular/flex-layout";
+import { JwtHelper } from 'angular2-jwt';
 /* END */
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from './auth.module';
-import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
+import { AppComponent } from './app.component';
+import { LoginSignupComponent } from './login-signup/login-signup.component';
+import { HomeComponent } from './home/home.component';
 import { RoomComponent } from './room/room.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AddUserComponent } from './add-user/add-user.component';
 /* REDUX */
 import {
   applyMiddleware,
@@ -59,8 +61,9 @@ import {
   createStore
 } from 'redux';
 import { NgReduxModule, NgRedux } from 'ng2-redux';
-import { AddUserComponent } from './add-user/add-user.component';
-interface IAppState { /* ... */ };
+import { store, IUserState } from './redux-store/index';
+import { ComponentActions } from './redux-store/actions';
+import { ActionService } from './action.service';
 /* END */
 const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -120,10 +123,15 @@ const ROUTES: Routes = [
     MatTooltipModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
-    FlexLayoutModule
+    FlexLayoutModule,
     /* END */
+    NgReduxModule,
   ],
-  providers: [AuthGuard, AuthService],
+  providers: [AuthGuard, AuthService, ComponentActions, ActionService, JwtHelper],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(ngRedux: NgRedux<IUserState>) {
+    ngRedux.provideStore(store)
+  }
+}
