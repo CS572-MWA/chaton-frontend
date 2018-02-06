@@ -25,8 +25,8 @@ export class HomeComponent implements OnInit, AfterViewChecked {
   messageForm: FormGroup;
   @select('user') user$: Observable<IUser>;
   @select('groups') groups$: Observable<IGroup>;
-  activeGroup: any;
-  user: {};
+  active_group_id: string = '';
+  user: any = {};
   groupMessages: any = {};
   messages: any = [];
   //
@@ -53,6 +53,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
         case 'success':
           this.actionService.addGroup(data.data);
           for(let g of data.data){
+            if(this.active_group_id == '') this.active_group_id = g._id
             this.groupMessages[g._id] = {
               users: g.users,
               messages: g.messages,
@@ -82,6 +83,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
   } 
 
   ngOnInit() {
+
     // LISTEN SENT MESSAGE
     this.listener1 = this.chatService.getMessage().subscribe(data => {
       let time = new Date();
@@ -135,7 +137,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
 
   tabChanged(event: MatTabChangeEvent) {
     this.groups$.subscribe(groups => {
-      this.activeGroup = groups[event.index];
+      this.active_group_id = groups[event.index].id;
     });
   }
 
@@ -144,7 +146,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
     this.messageForm.controls['message'].setValue('');
     let time = new Date();
     this.chatService.sendMessage({
-      groupId: this.activeGroup.id,
+      groupId: this.active_group_id,
       userId: this.user['id'],
       message: message, 
     });

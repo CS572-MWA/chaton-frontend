@@ -48,7 +48,6 @@ export class LoginSignupComponent implements OnInit {
     let user = this.loginForm.value;
     user.location = this.location;
     this.authService.login(user).subscribe(result => {
-      console.log(result);
       switch(result['status']){
         case 'success':
           console.log('login');

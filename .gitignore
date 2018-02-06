@@ -42,3 +42,4 @@ testem.log
 .DS_Store
 Thumbs.db
 /src/app/app.config.ts
+/dist

@@ -16,10 +16,12 @@ function updateUser(state, action): IAppState {
     if(!action.user) return state;
     for(let group of state.groups){
         let user = group.users.find(user => user._id == action.user.id);
-        user.username = action.user.username;
-        user.email = action.user.email;
-        user.gender = action.user.gender;
-        user.age = action.user.age;
+        if(user){
+            user.username = action.user.username;
+            user.email = action.user.email;
+            user.gender = action.user.gender;
+            user.age = action.user.age;
+        }
     }
     return Object.assign({}, state, 
     {
