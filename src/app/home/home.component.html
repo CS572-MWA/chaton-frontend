@@ -71,7 +71,7 @@
             fxLayout.xs="column"
             fxLayoutAlign="center start"
             fxLayoutAlign.xs="start">
-        <div class="flex-item overflow" #left fxFlex="80%">
+        <div *ngIf="groupMessages[group.id]" class="flex-item overflow" #left fxFlex="80%">
             <mat-list role="list" class="chat">
                 <mat-list-item 
                   *ngFor="let message of groupMessages[group.id].messages" 

@@ -49,7 +49,6 @@ export class HomeComponent implements OnInit, AfterViewChecked {
       this.user = data;
     });
     this.authService.groups().subscribe(data => {
-      console.log(data);
       switch(data.status){
         case 'success':
           this.actionService.addGroup(data.data);
