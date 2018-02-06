@@ -21,7 +21,6 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
   messageForm: FormGroup;
   @select('user') user$: Observable<IUser>;
   @select('groups') groups$: Observable<IGroup>;
@@ -70,7 +69,6 @@ export class HomeComponent implements OnInit {
     this.chatService.getMessage().subscribe(data => {
       let time = new Date();
       let user = this.groupMessages[data['groupId']].users.find(u => u._id == data['userId']);
-      console.log(user);
       this.groupMessages[data['groupId']].messages.push({
         user: user,
         message: data['message'],
