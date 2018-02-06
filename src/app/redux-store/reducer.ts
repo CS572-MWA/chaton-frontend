@@ -13,6 +13,7 @@ const initialState: IAppState = {
 }  
 
 function updateUser(state, action): IAppState {
+    if(!action.user) return state;
     for(let group of state.groups){
         let user = group.users.find(user => user._id == action.user.id);
         user.username = action.user.username;
