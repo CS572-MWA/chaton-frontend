@@ -19,11 +19,14 @@ export class ActionService {
   }
 
   addGroup(groups): void {
+    let data = this.parseToken();
     for(let group of groups) {
       this.componentActions.addGroup({
         id: group._id,
         name: group.name,
+        status: group.status,
         users: group.users,
+        current_user_id: data.id,
       });
     }
   }

@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms/src/model';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { ChatService } from '../chat.service';
 
 @Component({
   selector: 'app-login-signup',
@@ -16,6 +17,7 @@ export class LoginSignupComponent implements OnInit {
   location: [any];
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
+              private chatService: ChatService,
               private router: Router) {            
     this.loginForm = formBuilder.group({
       'email': ['', Validators.compose([Validators.required, Validators.email])],
@@ -46,9 +48,16 @@ export class LoginSignupComponent implements OnInit {
     let user = this.loginForm.value;
     user.location = this.location;
     this.authService.login(user).subscribe(result => {
+      console.log(result);
       switch(result['status']){
         case 'success':
           console.log('login');
+          for(let group of result.data.groups){
+            this.chatService.enterGroup({
+              id: group._id, // groupID
+              groups: [group]
+            });
+          }
           localStorage.setItem('token', result.data.token);
           this.router.navigate(['home']);
           break;
@@ -73,6 +82,12 @@ export class LoginSignupComponent implements OnInit {
           this.authService.login(user).subscribe(result => {
             switch(result['status']){
               case 'success':
+                for(let group of result.data.groups){
+                  this.chatService.enterGroup({
+                    id: group._id, // groupID
+                    groups: [group]
+                  });
+                }
                 localStorage.setItem('token', result.data.token);
                 this.router.navigate(['home']);
                 break;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewChecked } from '@angular/core';
 import { MatDialog, MatTabChangeEvent } from '@angular/material';
 import { RoomComponent } from './../room/room.component';
 import { ProfileComponent } from './../profile/profile.component';
@@ -21,7 +21,7 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewChecked {
-  @ViewChild('left') left;
+  @ViewChildren('left') lefts;
   messageForm: FormGroup;
   @select('user') user$: Observable<IUser>;
   @select('groups') groups$: Observable<IGroup>;
@@ -29,6 +29,11 @@ export class HomeComponent implements OnInit, AfterViewChecked {
   user: {};
   groupMessages: any = {};
   messages: any = [];
+  //
+  listener1: any;
+  listener2: any;
+  listener3: any;
+  listener4: any;
   constructor(private dialog: MatDialog, 
               private authService: AuthService,
               private formBuilder: FormBuilder,
@@ -44,13 +49,14 @@ export class HomeComponent implements OnInit, AfterViewChecked {
       this.user = data;
     });
     this.authService.groups().subscribe(data => {
+      console.log(data);
       switch(data.status){
         case 'success':
           this.actionService.addGroup(data.data);
           for(let g of data.data){
             this.groupMessages[g._id] = {
               users: g.users,
-              messages: [],
+              messages: g.messages,
             }
           }
           this.chatService.enterGroups(data.data);
@@ -66,67 +72,72 @@ export class HomeComponent implements OnInit, AfterViewChecked {
 
   scrollToBottom(): void {
     try {
-      this.left.nativeElement.scrollTop = this.left.nativeElement.scrollHeight;
-    } catch(err) { } 
+      this.lefts.forEach(element => {
+        element.nativeElement.scrollTop = element.nativeElement.scrollHeight
+      });
+    } catch(err) {} 
   }
 
-  ngAfterViewChecked() {        
+  ngAfterViewChecked() {  
     this.scrollToBottom();        
   } 
 
   ngOnInit() {
-
     // LISTEN SENT MESSAGE
-    this.chatService.getMessage().subscribe(data => {
+    this.listener1 = this.chatService.getMessage().subscribe(data => {
       let time = new Date();
       let user = this.groupMessages[data['groupId']].users.find(u => u._id == data['userId']);
       this.groupMessages[data['groupId']].messages.push({
         user: user,
-        message: data['message'],
+        content: data['message'],
         type: user._id == this.user['id'] ? 'self': 'other',
-        time: time.getHours() + ":" + time.getMinutes(),
+        createdAt: this.dateFormatter(time),
       });
-      //this.left.nativeElement.scrollTop = this.left.nativeElement.scrollHeight + 100;
     });
 
     // LISTEN REMOVED USER
-    this.chatService.leaveGroupSubscribe().subscribe(data => {
+    this.listener2 = this.chatService.leaveGroupSubscribe().subscribe(data => {
       data['current_user_id'] = this.user['id'];
       this.actionService.removeUserFromGroup(data);
     });
     
     // LISTEN ENTER GROUP 
-    this.chatService.enterGroupSubscribe().subscribe(data => {
+    this.listener3 = this.chatService.enterGroupSubscribe().subscribe(data => {
       this.actionService.addGroup(data['groups']);
       for(let group of data['groups']){
         if(!this.groupMessages[group._id]){
           this.groupMessages[group._id] = {
             users: group.users,
-            messages:[],
+            messages: [],
           }
+          this.chatService.enterGroups([{ _id: group._id }]);
         }
         else {
-          for(let u of group.users){
-            this.groupMessages[group._id].users.push(u);    
-          }
+          this.groupMessages[group._id].users = this.groupMessages[group._id].users.concat(group.users)
         }
       }
-      let group_ids: any = [];
-      for(let id of Object.keys(this.groupMessages)){
-        group_ids.push({ _id: id });
-      }
-      this.chatService.enterGroups(group_ids);
     });
   }
 
+  dateFormatter(date): string {
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    var day = date.getDate().toString();
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day + ' ' + date.getHours() + ':' + date.getMinutes();
+  }
+
   ngOnDestroy(){
-    //this.chatService.getMessage
+    this.listener1.unsubscribe();
+    this.listener2.unsubscribe();
+    this.listener3.unsubscribe();
   }
 
   tabChanged(event: MatTabChangeEvent) {
     this.groups$.subscribe(groups => {
       this.activeGroup = groups[event.index];
-    })
+    });
   }
 
   onSubmit(): void {

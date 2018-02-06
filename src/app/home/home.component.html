@@ -71,7 +71,7 @@
             fxLayout.xs="column"
             fxLayoutAlign="center start"
             fxLayoutAlign.xs="start">
-        <div class="flex-item overflow" fxFlex="80%" #left>
+        <div class="flex-item overflow" #left fxFlex="80%">
             <mat-list role="list" class="chat">
                 <mat-list-item 
                   *ngFor="let message of groupMessages[group.id].messages" 
@@ -84,9 +84,9 @@
                   <div class="msg">
                     <p><b>{{ message.user.username }}</b></p>
                     <p>
-                      {{ message.message }}
+                      {{ message.content }}
                     </p>
-                    <time>{{ message.time }}</time>
+                    <time>{{ message.createdAt }}</time>
                   </div>
                 </mat-list-item>
             </mat-list>
@@ -96,7 +96,7 @@
               <span><i class="fa fa-users"></i> users</span>
             </mat-toolbar>
             <mat-list role="list">
-                <mat-list-item role="listitem">
+                <mat-list-item role="listitem" *ngIf="group.status != 0">
                   <a mat-raised-button (click)="openAddUserDialog(group.id)">
                     <i class="fa fa-plus red"></i> Add user
                   </a>
@@ -105,7 +105,7 @@
                   <i class="fa fa-female pink" *ngIf="gu.gender == 'female'"></i> 
                   <i class="fa fa-male blue" *ngIf="gu.gender == 'male'"></i>
                   &nbsp;{{ gu.username }}
-                  <div style="position: absolute; right: 20px; margin-top: -20px;">
+                  <div *ngIf="group.status != 0" style="position: absolute; right: 20px; margin-top: -20px;">
                     <a (click)="removeUserFromGroup(group.id, gu._id)"><i class="fa fa-trash-o"></i></a>
                   </div>
                 </mat-list-item>

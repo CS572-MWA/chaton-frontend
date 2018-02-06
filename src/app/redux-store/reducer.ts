@@ -30,7 +30,9 @@ function updateUser(state, action): IAppState {
 function addGroup(state, action): IAppState {
     let index = state.groups.findIndex(group => group.id == action.group.id);
     if(index == -1){
-        state.groups.push(action.group);
+        if(action.group.users.findIndex(u => u._id == action.group.current_user_id) != -1){
+            state.groups.push(action.group);
+        }   
     }
     else state.groups[index] = action.group;
     return state;
