@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
 import { MatDialog, MatTabChangeEvent } from '@angular/material';
 import { RoomComponent } from './../room/room.component';
 import { ProfileComponent } from './../profile/profile.component';
@@ -20,7 +20,8 @@ import { ChatService } from '../chat.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewChecked {
+  @ViewChild('left') left;
   messageForm: FormGroup;
   @select('user') user$: Observable<IUser>;
   @select('groups') groups$: Observable<IGroup>;
@@ -63,6 +64,16 @@ export class HomeComponent implements OnInit {
     });            
   }
 
+  scrollToBottom(): void {
+    try {
+      this.left.nativeElement.scrollTop = this.left.nativeElement.scrollHeight;
+    } catch(err) { } 
+  }
+
+  ngAfterViewChecked() {        
+    this.scrollToBottom();        
+  } 
+
   ngOnInit() {
 
     // LISTEN SENT MESSAGE
@@ -75,6 +86,7 @@ export class HomeComponent implements OnInit {
         type: user._id == this.user['id'] ? 'self': 'other',
         time: time.getHours() + ":" + time.getMinutes(),
       });
+      //this.left.nativeElement.scrollTop = this.left.nativeElement.scrollHeight + 100;
     });
 
     // LISTEN REMOVED USER

@@ -46,9 +46,9 @@ export class LoginSignupComponent implements OnInit {
     let user = this.loginForm.value;
     user.location = this.location;
     this.authService.login(user).subscribe(result => {
-      console.log(result);
       switch(result['status']){
         case 'success':
+          console.log('login');
           localStorage.setItem('token', result.data.token);
           this.router.navigate(['home']);
           break;
@@ -66,7 +66,6 @@ export class LoginSignupComponent implements OnInit {
     let user = this.signupForm.value;
     user.location = this.location;
     this.authService.createUser(user).subscribe(data => {
-      console.log(data);
       switch(data['status']) {
         case 'success':
           user = { email: user.email, password: user.password };

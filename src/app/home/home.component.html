@@ -71,7 +71,7 @@
             fxLayout.xs="column"
             fxLayoutAlign="center start"
             fxLayoutAlign.xs="start">
-        <div class="flex-item overflow" fxFlex="80%" #left [scrollTop]="left.scrollHeight">
+        <div class="flex-item overflow" fxFlex="80%" #left>
             <mat-list role="list" class="chat">
                 <mat-list-item 
                   *ngFor="let message of groupMessages[group.id].messages" 
@@ -91,7 +91,7 @@
                 </mat-list-item>
             </mat-list>
         </div>
-        <div class="flex-item overflow" fxFlex="20%" #right [scrollTop]="right.scrollHeight">
+        <div class="flex-item overflow" fxFlex="20%">
             <mat-toolbar color="primary">
               <span><i class="fa fa-users"></i> users</span>
             </mat-toolbar>

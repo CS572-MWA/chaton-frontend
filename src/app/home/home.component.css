@@ -8,7 +8,7 @@ mat-tab-group {
 
 .overflow {
     overflow: auto;
-    max-height: 65vh;
+    height: 65vh;
 }
 
 .chat {
