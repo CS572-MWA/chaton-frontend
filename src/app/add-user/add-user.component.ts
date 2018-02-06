@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { MatDialogRef } from '@angular/material';
 import { AuthService } from '../auth.service';
 import { ActionService } from '../action.service';
+import { ChatService } from '../chat.service';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class AddUserComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, 
               private authService: AuthService,
               private actionServie: ActionService,
+              private chatService: ChatService,
               private dialogRef: MatDialogRef<AddUserComponent>) { 
     
     this.userForm = formBuilder.group({
@@ -50,9 +52,9 @@ export class AddUserComponent implements OnInit {
       this.authService.addUserToGroup({ id: this.group_id, user_id: user_id }).subscribe(data=>{
         switch(data.status){
           case 'success':
-            this.actionServie.addUsersToGroup({
+            this.chatService.enterGroup({
               id: this.group_id,
-              users: data.data.users
+              groups: [data.data]
             });
             this.dialogRef.close();
             break;

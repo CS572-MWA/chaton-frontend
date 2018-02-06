@@ -64,6 +64,12 @@ import { NgReduxModule, NgRedux } from 'ng2-redux';
 import { store, IAppState } from './redux-store/index';
 import { ComponentActions } from './redux-store/actions';
 import { ActionService } from './action.service';
+import { ChatService } from './chat.service';
+/* END */
+/* SOCKET.IO */
+import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
+import { URL } from './app.config';
+const config: SocketIoConfig = { url: URL, options: {} };
 /* END */
 const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -126,8 +132,16 @@ const ROUTES: Routes = [
     FlexLayoutModule,
     /* END */
     NgReduxModule,
+    SocketIoModule.forRoot(config), 
   ],
-  providers: [AuthGuard, AuthService, ComponentActions, ActionService, JwtHelper],
+  providers: [
+    AuthGuard, 
+    AuthService, 
+    ComponentActions, 
+    ActionService, 
+    JwtHelper, 
+    ChatService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

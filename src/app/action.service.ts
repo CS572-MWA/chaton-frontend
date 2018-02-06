@@ -36,11 +36,10 @@ export class ActionService {
   }
 
   removeUserFromGroup(data): void {
-    let current_user = this.parseToken();
     this.componentActions.removeUserFromGroup({
       id: data.id,
       user_id: data.user_id,
-      current_user_id: current_user.id
+      current_user_id: data.current_user_id
     })
   }
 

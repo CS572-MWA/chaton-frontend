@@ -27,9 +27,12 @@ function updateUser(state, action): IAppState {
 }
 
 function addGroup(state, action): IAppState {
-    return Object.assign({}, state, {
-        groups: [...state.groups, action.group]
-    });
+    let index = state.groups.findIndex(group => group.id == action.group.id);
+    if(index == -1){
+        state.groups.push(action.group);
+    }
+    else state.groups[index] = action.group;
+    return state;
 }
 
 function addUserToGroup(state, action){
@@ -43,9 +46,9 @@ function removeUserFromGroup(state, action){
         state.groups[index].users.forEach((user, i) => {
             if(user._id == action.group.user_id) {
                 state.groups[index].users.splice(i, 1);
-            }
-            if(action.group.user_id == action.group.current_user_id){
-                state.groups.splice(index, 1);
+                if(action.group.user_id == action.group.current_user_id){
+                    state.groups.splice(index, 1);
+                }
             }
         });
     }

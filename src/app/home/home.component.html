@@ -44,10 +44,13 @@
   </mat-sidenav-container>
 </mat-sidenav>
 
-<div style="position: fixed;left:10px;bottom: 10px; z-index: 10; width: 50%;">
+<div style="position: absolute;left:10px;bottom: 10px; z-index: 10; width: 50%;">
     <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
       <mat-form-field style="width: 100%;">
-          <input matInput placeholder="Type here ..." [formControl]="messageForm.controls['message']"/>
+          <input matInput 
+                 placeholder="Type and hit enter to send message" 
+                 [formControl]="messageForm.controls['message']"
+                 autocomplete="off" />
           <mat-error *ngIf="!messageForm.controls['message'].valid">
               Message required
           </mat-error>
@@ -55,27 +58,40 @@
     </form>
 </div>
 
-<div style="position: fixed;right:10px;bottom: 10px; z-index: 10;">
+<div style="position: absolute;right:10px;bottom: 10px; z-index: 10;">
   <button mat-button mat-fab matTooltip="add room!" (click)="openRoomDialog()">
       +
   </button>
 </div>
 
-<mat-tab-group (click)="sidenav.close()">
+<mat-tab-group (click)="sidenav.close()" #tabGroup (selectedTabChange)="tabChanged($event)">
     <mat-tab *ngFor="let group of groups$ | async" label="{{ group.name }}">
       <div class="flex-container" 
             fxLayout="row" 
             fxLayout.xs="column"
-            fxLayoutAlign="center center"
+            fxLayoutAlign="center start"
             fxLayoutAlign.xs="start">
-        <div class="flex-item" fxFlex="80%">
-            <mat-list role="list">
-                <mat-list-item role="listitem">
-                  Hello
+        <div class="flex-item overflow" fxFlex="80%">
+            <mat-list role="list" class="chat">
+                <mat-list-item 
+                  *ngFor="let message of groupMessages[group.id].messages" 
+                  [ngClass]="{ 'self': message.type == 'self', 'other': message.type == 'other' }"
+                  role="listitem">
+                  <div class="avatar">
+                      <img *ngIf="message.user.gender == 'male'" src="assets/images/male.png">
+                      <img *ngIf="message.user.gender == 'female'" src="assets/images/female.png">
+                  </div>
+                  <div class="msg">
+                    <p><b>{{ message.user.username }}</b></p>
+                    <p>
+                      {{ message.message }}
+                    </p>
+                    <time>{{ message.time }}</time>
+                  </div>
                 </mat-list-item>
             </mat-list>
         </div>
-        <div class="flex-item" fxFlex="20%">
+        <div class="flex-item overflow" fxFlex="20%">
             <mat-toolbar color="primary">
               <span><i class="fa fa-users"></i> users</span>
             </mat-toolbar>
@@ -92,7 +108,7 @@
                   <div style="position: absolute; right: 20px; margin-top: -20px;">
                     <a (click)="removeUserFromGroup(group.id, gu._id)"><i class="fa fa-trash-o"></i></a>
                   </div>
-                </mat-list-item> 
+                </mat-list-item>
             </mat-list>
         </div>
       </div>

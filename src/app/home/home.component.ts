@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTabChangeEvent } from '@angular/material';
 import { RoomComponent } from './../room/room.component';
 import { ProfileComponent } from './../profile/profile.component';
 import { AddUserComponent } from './../add-user/add-user.component';
@@ -13,6 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import { IUser } from './../redux-store/user';
 import { IGroup } from './../redux-store/group';
 import { ActionService } from '../action.service';
+import { ChatService } from '../chat.service';
 
 @Component({
   selector: 'app-home',
@@ -24,12 +25,15 @@ export class HomeComponent implements OnInit {
   messageForm: FormGroup;
   @select('user') user$: Observable<IUser>;
   @select('groups') groups$: Observable<IGroup>;
-  groups: [any];
+  activeGroup: any;
   user: {};
+  groupMessages: any = {};
+  messages: any = [];
   constructor(private dialog: MatDialog, 
               private authService: AuthService,
               private formBuilder: FormBuilder,
               private router: Router,
+              private chatService: ChatService,
               private actionService: ActionService) { 
     this.messageForm = formBuilder.group({
       'message': ['', Validators.required],
@@ -43,6 +47,13 @@ export class HomeComponent implements OnInit {
       switch(data.status){
         case 'success':
           this.actionService.addGroup(data.data);
+          for(let g of data.data){
+            this.groupMessages[g._id] = {
+              users: g.users,
+              messages: [],
+            }
+          }
+          this.chatService.enterGroups(data.data);
           break;
         case 'failed':
           console.log(data)
@@ -54,11 +65,69 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // LISTEN SENT MESSAGE
+    this.chatService.getMessage().subscribe(data => {
+      let time = new Date();
+      let user = this.groupMessages[data['groupId']].users.find(u => u._id == data['userId']);
+      console.log(user);
+      this.groupMessages[data['groupId']].messages.push({
+        user: user,
+        message: data['message'],
+        type: user._id == this.user['id'] ? 'self': 'other',
+        time: time.getHours() + ":" + time.getMinutes(),
+      });
+    });
+
+    // LISTEN REMOVED USER
+    this.chatService.leaveGroupSubscribe().subscribe(data => {
+      data['current_user_id'] = this.user['id'];
+      this.actionService.removeUserFromGroup(data);
+    });
     
+    // LISTEN ENTER GROUP 
+    this.chatService.enterGroupSubscribe().subscribe(data => {
+      this.actionService.addGroup(data['groups']);
+      for(let group of data['groups']){
+        if(!this.groupMessages[group._id]){
+          this.groupMessages[group._id] = {
+            users: group.users,
+            messages:[],
+          }
+        }
+        else {
+          for(let u of group.users){
+            this.groupMessages[group._id].users.push(u);    
+          }
+        }
+      }
+      let group_ids: any = [];
+      for(let id of Object.keys(this.groupMessages)){
+        group_ids.push({ _id: id });
+      }
+      this.chatService.enterGroups(group_ids);
+    });
+  }
+
+  ngOnDestroy(){
+    //this.chatService.getMessage
+  }
+
+  tabChanged(event: MatTabChangeEvent) {
+    this.groups$.subscribe(groups => {
+      this.activeGroup = groups[event.index];
+    })
   }
 
   onSubmit(): void {
-    console.log(1234);
+    let message = this.messageForm.value.message;
+    this.messageForm.controls['message'].setValue('');
+    let time = new Date();
+    this.chatService.sendMessage({
+      groupId: this.activeGroup.id,
+      userId: this.user['id'],
+      message: message, 
+    });
   }
 
   openRoomDialog(): void{
@@ -98,9 +167,9 @@ export class HomeComponent implements OnInit {
       this.authService.removeUserFromGroup({ id: group_id, user_id: user_id }).subscribe(data => {
         switch(data.status){
           case 'success':
-            this.actionService.removeUserFromGroup({
+            this.chatService.leaveGroupEmit({
               id: group_id,
-              user_id: user_id
+              user_id: user_id,
             });
             break;
           case 'failed':
