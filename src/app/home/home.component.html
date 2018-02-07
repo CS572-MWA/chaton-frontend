@@ -86,7 +86,7 @@
                     <p>
                       {{ message.content }}
                     </p>
-                    <time>{{ message.createdAt }}</time>
+                    <time>{{ message.createdAt | date: "yy-MM-dd h:mm" }}</time>
                   </div>
                 </mat-list-item>
             </mat-list>

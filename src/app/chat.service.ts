@@ -6,10 +6,6 @@ export class ChatService {
 
   constructor(private socket: Socket) { }
 
-  enterGroups(data){
-    this.socket.emit('enter groups', data);
-  }
-
   enterGroup(data){
     this.socket.emit('enter group', data);
   }
@@ -18,6 +14,10 @@ export class ChatService {
     return this.socket.fromEvent('enter group').map(data => data);
   }
 
+  enterGroups(data){
+    this.socket.emit('enter groups', data);
+  }
+  
   leaveGroupEmit(data){
     this.socket.emit('leave group', data);
   }
