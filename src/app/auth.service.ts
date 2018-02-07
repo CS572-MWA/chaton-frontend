@@ -53,19 +53,19 @@ export class AuthService {
   }
 
   addUserToGroup(group): Observable<any> {
-    return this.authHttp.put(this.url + '/users/groups/' + group.id, {users: [group.user_id]}).map((response: Response) => {
+    return this.authHttp.put(this.url + '/groups/' + group.id, {users: [group.user_id]}).map((response: Response) => {
       return response.json();
     });
   }
 
   removeUserFromGroup(group): Observable<any> {
-    return this.authHttp.delete(this.url + '/users/groups/' + group.id + '/' + group.user_id + '/').map((response: Response) => {
+    return this.authHttp.delete(this.url + '/groups/' + group.id + '/' + group.user_id + '/').map((response: Response) => {
       return response.json();
     });
   }
 
   groups(): Observable<any> {
-    return this.authHttp.get(this.url + '/users/groups/').map((response: Response) => {
+    return this.authHttp.get(this.url + '/groups/').map((response: Response) => {
       return response.json();
     });
   }
